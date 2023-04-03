@@ -2,7 +2,7 @@
 
 ## ERD
 
-![ERD 이미지](ERD.png)
+![ERD 이미지](ERD.svg)
 
 ## 사용자  
 
