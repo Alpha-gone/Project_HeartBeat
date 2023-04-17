@@ -1,13 +1,13 @@
-package com.example.apiserver;
+package com.git.hub.heartbeat.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApiserverApplicationTests {
+class ApiServerApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
