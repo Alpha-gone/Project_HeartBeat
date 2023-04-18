@@ -6,22 +6,16 @@ plugins {
 }
 
 group = 'com.github.heartbeat'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
-
-repositories {
-	mavenCentral()
-}
+version = '0.0.1-SNAPSHOT'
 
 ext {
 	set('snippetsDir', file("build/generated-snippets"))
 	set('testcontainersVersion', "1.17.6")
+}
+
+repositories {
+    mavenCentral()
 }
 
 dependencies {
@@ -29,12 +23,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+        exclude group:'org.junit.vintage', module:'junit-vintage-engine'
+    }
+    testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.testcontainers:junit-jupiter'
+
 }
 
 dependencyManagement {
@@ -42,6 +40,7 @@ dependencyManagement {
 		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
 	}
 }
+
 
 tasks.named('test') {
 	outputs.dir snippetsDir
@@ -52,6 +51,7 @@ tasks.named('asciidoctor') {
 	inputs.dir snippetsDir
 	dependsOn test
 }
+
 
 subprojects{
     group = 'com.github.heartbeat'
@@ -68,17 +68,28 @@ subprojects{
     	mavenCentral()
     }
 
+    ext {
+        set('testcontainersVersion', "1.17.6")
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+        }
+    }
+
     dependencies{
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    }
+        testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+            exclude group:'org.junit.vintage', module:'junit-vintage-engine'
+        }
+        testImplementation 'org.testcontainers:junit-jupiter'
+        }
 
     test {
-    	useJUnitPlatform()
+        useJUnitPlatform()
     }
-
-
 }
 
 project(':heartbeat-rdb'){
@@ -87,7 +98,6 @@ project(':heartbeat-rdb'){
     dependencies {
     	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     	runtimeOnly 'com.mysql:mysql-connector-j'
+    	testImplementation "org.testcontainers:mysql:1.17.6"
     }
-
-
 }
