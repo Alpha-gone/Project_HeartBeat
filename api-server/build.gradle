@@ -31,7 +31,6 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'org.testcontainers:junit-jupiter'
 
 }
 
@@ -81,11 +80,13 @@ subprojects{
     dependencies{
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
         testImplementation ('org.springframework.boot:spring-boot-starter-test') {
             exclude group:'org.junit.vintage', module:'junit-vintage-engine'
         }
         testImplementation 'org.testcontainers:junit-jupiter'
-        }
+    }
 
     test {
         useJUnitPlatform()
