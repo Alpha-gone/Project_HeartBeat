@@ -14,11 +14,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
+
 
 @Slf4j
 @Order(1)
@@ -32,49 +30,7 @@ public class UserTest extends HeartbeatRdbTestConfig{
     @Order(1)
     @DisplayName("회원 가입")
     void insertUser(){
-        List<APIData> apiDataList = new ArrayList<>();
-        apiDataList.add(
-                APIData.builder()
-                        .uuid(UUID.randomUUID())
-                        .recentDateTime(LocalDateTime.now())
-                        .recentLocation("위도,경도")
-                        .checkCount((byte) 0)
-                        .status(UserStatus.GOOD)
-                        .build()
-        );
-
-        apiDataList.add(
-                APIData.builder()
-                        .uuid(UUID.randomUUID())
-                        .recentDateTime(LocalDateTime.now())
-                        .recentLocation("위도,경도")
-                        .checkCount((byte) 0)
-                        .status(UserStatus.GOOD)
-                        .build()
-        );
-
-        List<User> userList = new ArrayList<>();
-        userList.add(
-                User.builder()
-                        .uuid(UUID.randomUUID())
-                        .name("홍길동")
-                        .nickName("길동전")
-                        .email("test@gmail.com")
-                        .password("1q2w3e4r5t")
-                        .phoneNumber("0001111222")
-                        .apiData(apiDataList.get(0))
-                        .build());
-
-        userList.add(
-                User.builder()
-                        .uuid(UUID.randomUUID())
-                        .name("유관순")
-                        .nickName("5만원")
-                        .email("test2@gmail.com")
-                        .password("1q2w3e4r5t")
-                        .phoneNumber("33344445555")
-                        .apiData(apiDataList.get(1))
-                        .build());
+        var userList = initUserData();
 
         Assertions.assertNotNull(userRepo.saveAll(userList), "유저 생성 완료");
     }

@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Data
-@ToString(exclude = "user")
+//@ToString(exclude = "user")
 @Entity
 @Table(name = "tb_api_data", schema = "heartbeat")
 @DynamicInsert
