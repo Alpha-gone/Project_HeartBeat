@@ -1,18 +1,15 @@
 package com.github.heartbeat.rdb.user.entity;
 
 import com.github.heartbeat.rdb.apidata.entity.APIData;
-import com.github.heartbeat.rdb.group.entity.Group;
+import com.github.heartbeat.rdb.mapping.entity.GroupUserMap;
+import com.github.heartbeat.rdb.message.entity.Message;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.DynamicInsert;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 
 @NoArgsConstructor
@@ -20,15 +17,15 @@ import java.util.UUID;
 @Builder
 @Data
 @Entity
-@DynamicInsert
 @Table(name = "tb_user", schema = "heartbeat")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(insertable = false, updatable = false)
     private Long idx;
 
-    @Column(length = 36, nullable = false, updatable = false, unique = true)
+    @Column(nullable = false, updatable = false, unique = true)
     private UUID uuid;
 
     @Column(length = 5, nullable = false, updatable = false)
@@ -47,29 +44,17 @@ public class User {
     private String phoneNumber;
 
     @CreationTimestamp
+    @Column(nullable = false, updatable = false)
     private LocalDateTime resistAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<Message> messages;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "api_idx", referencedColumnName = "idx", unique = true, nullable = false)
     private APIData apiData;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "group_user_map",
-            joinColumns = @JoinColumn(
-                    name = "user_idx",
-                    referencedColumnName = "idx"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name = "group_idx",
-                    referencedColumnName = "idx"
-            )
-    )
+    @OneToMany(mappedBy = "user")
     @Column(name = "group_list")
-    private List<Group> groupList;
-
-    public void addGroup(Group group){
-        if(Objects.isNull(groupList)) groupList = new ArrayList<>();
-        groupList.add(group);
-    }
+    private List<GroupUserMap> groupList;
 }
