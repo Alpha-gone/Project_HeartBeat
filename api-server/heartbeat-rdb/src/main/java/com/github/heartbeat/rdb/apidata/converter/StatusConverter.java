@@ -3,18 +3,14 @@ package com.github.heartbeat.rdb.apidata.converter;
 import com.github.heartbeat.rdb.apidata.constdata.UserStatus;
 import jakarta.persistence.AttributeConverter;
 
-public class StatusConverter implements AttributeConverter<UserStatus, Short> {
+public class StatusConverter implements AttributeConverter<UserStatus, Byte> {
     @Override
-    public Short convertToDatabaseColumn(UserStatus attribute) {
-        return switch (attribute) {
-            case GOOD -> 0;
-            case CAUTION -> 1;
-            case WARING-> 2;
-        };
+    public Byte convertToDatabaseColumn(UserStatus attribute) {
+        return (byte) attribute.ordinal();
     }
 
     @Override
-    public UserStatus convertToEntityAttribute(Short dbData) {
+    public UserStatus convertToEntityAttribute(Byte dbData) {
         return switch (dbData){
             case 0 -> UserStatus.GOOD;
             case 1 -> UserStatus.CAUTION;

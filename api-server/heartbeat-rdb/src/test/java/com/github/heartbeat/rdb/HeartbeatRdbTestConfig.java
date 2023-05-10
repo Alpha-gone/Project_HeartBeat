@@ -3,7 +3,12 @@ package com.github.heartbeat.rdb;
 
 import com.github.heartbeat.rdb.apidata.constdata.UserStatus;
 import com.github.heartbeat.rdb.apidata.entity.APIData;
+import com.github.heartbeat.rdb.apidata.repo.APIDataRepository;
 import com.github.heartbeat.rdb.user.entity.User;
+import com.github.heartbeat.rdb.user.repo.UserRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -35,6 +40,7 @@ import java.util.UUID;
         "spring.jooq.sql-dialect=org.hibernate.dialect.MySQL8Dialect"})
 @SpringBootTest(classes = HeartbeatRdbTestConfig.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)
 abstract class HeartbeatRdbTestConfig {
+
     @Container
     private static final MySQLContainer MY_SQL_CONTAINER = new MySQLContainer("mysql:latest");
 
@@ -56,7 +62,6 @@ abstract class HeartbeatRdbTestConfig {
                         .uuid(UUID.randomUUID())
                         .recentDateTime(LocalDateTime.now())
                         .recentLocation("위도,경도")
-                        .checkCount((byte) 0)
                         .status(UserStatus.GOOD)
                         .build()
         );
@@ -66,7 +71,6 @@ abstract class HeartbeatRdbTestConfig {
                         .uuid(UUID.randomUUID())
                         .recentDateTime(LocalDateTime.now())
                         .recentLocation("위도,경도")
-                        .checkCount((byte) 0)
                         .status(UserStatus.GOOD)
                         .build()
         );
